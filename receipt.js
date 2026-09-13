@@ -160,12 +160,20 @@ document.addEventListener('input', scheduleSaveDraft);
 
 const sheet = document.getElementById('sheet');
 
+function clearCellStretch() {
+  sheet.querySelectorAll('td, th').forEach((cell) => {
+    cell.style.paddingTop = '';
+    cell.style.paddingBottom = '';
+  });
+}
+
 function fitSheetToPaper() {
   // Uses `zoom` rather than `transform: scale()` — print/PDF overflow and
   // page-break decisions in Chrome/Edge are based on the untransformed
   // layout size, so a transform-scaled box can still overflow the outline
   // even though it renders smaller. `zoom` actually resizes the layout box.
   sheet.style.zoom = '';
+  clearCellStretch();
 
   // sheet is forced to its full design width (860px) in print CSS, regardless
   // of the tiny 48절 outline size, so scrollWidth/scrollHeight here reflect the
@@ -182,7 +190,36 @@ function fitSheetToPaper() {
   const naturalWidth = sheet.scrollWidth;
   const naturalHeight = sheet.scrollHeight;
 
-  const scale = Math.min(availableWidthPx / naturalWidth, availableHeightPx / naturalHeight, 1);
+  const widthScale = availableWidthPx / naturalWidth;
+  const heightScale = availableHeightPx / naturalHeight;
+  let scale = Math.min(widthScale, heightScale, 1);
+
+  // Width is normally the binding constraint on this narrow paper, which
+  // leaves blank space below once scaled. Instead of leaving it blank,
+  // spread that leftover height evenly across every table cell's padding
+  // (info table, summary table, item rows alike) so the content grows to
+  // fill the whole outline instead of stopping partway down the page.
+  if (widthScale <= heightScale && widthScale < 1) {
+    const projectedHeight = naturalHeight * widthScale;
+    const leftoverPx = availableHeightPx - projectedHeight;
+    if (leftoverPx > 0) {
+      // Cells in the same row share that row's height (it's the tallest
+      // cell that decides it), so the height a row actually gains is the
+      // per-cell padding increase itself — not that amount times however
+      // many cells sit in the row. Divide by row count, not cell count.
+      const rows = sheet.querySelectorAll('tr');
+      const cells = sheet.querySelectorAll('td, th');
+      if (rows.length > 0 && cells.length > 0) {
+        const extraNaturalPerRow = (leftoverPx / widthScale) / rows.length;
+        cells.forEach((cell) => {
+          cell.style.paddingTop = `calc(8px + ${extraNaturalPerRow / 2}px)`;
+          cell.style.paddingBottom = `calc(8px + ${extraNaturalPerRow / 2}px)`;
+        });
+      }
+    }
+    scale = widthScale;
+  }
+
   if (scale < 1) {
     sheet.style.zoom = scale;
   }
@@ -190,6 +227,7 @@ function fitSheetToPaper() {
 
 function resetSheetScale() {
   sheet.style.zoom = '';
+  clearCellStretch();
 }
 
 window.addEventListener('beforeprint', fitSheetToPaper);
