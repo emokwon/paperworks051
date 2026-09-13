@@ -128,3 +128,17 @@
   .receipt-top { flex-direction: column; align-items: flex-start; gap: 10px; }
   .receipt-to input { width: 100%; text-align: left; }
 }
+
+/* 48절 실물 영수증 용지 규격 (86 x 185mm) */
+@page {
+  size: 86mm 185mm;
+  margin: 4mm;
+}
+
+@media print {
+  .receipt-sheet {
+    width: 860px;
+    max-width: none;
+    padding: 24px 28px;
+  }
+}

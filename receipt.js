@@ -62,8 +62,44 @@ stampInput.addEventListener('change', () => {
   reader.readAsDataURL(file);
 });
 
+const sheet = document.getElementById('sheet');
+
+function fitSheetToPaper() {
+  sheet.style.transform = 'none';
+
+  // sheet is forced to its full design width (860px) in print CSS, regardless
+  // of the tiny 48절 paper size, so scrollWidth/scrollHeight here reflect the
+  // true, unsquashed layout before we shrink it to fit.
+  const pxPerMm = 96 / 25.4;
+  const pageWidthMm = 86; // 48절 실물 영수증 용지
+  const pageHeightMm = 185;
+  const pageMarginMm = 8; // matches @page margin: 4mm on each side
+
+  const availableWidthPx = (pageWidthMm - pageMarginMm) * pxPerMm;
+  const availableHeightPx = (pageHeightMm - pageMarginMm) * pxPerMm;
+
+  const naturalWidth = sheet.scrollWidth;
+  const naturalHeight = sheet.scrollHeight;
+
+  const scale = Math.min(availableWidthPx / naturalWidth, availableHeightPx / naturalHeight, 1);
+  if (scale < 1) {
+    sheet.style.transformOrigin = 'top left';
+    sheet.style.transform = `scale(${scale})`;
+  }
+}
+
+function resetSheetScale() {
+  sheet.style.transform = 'none';
+}
+
+window.addEventListener('beforeprint', fitSheetToPaper);
+window.addEventListener('afterprint', resetSheetScale);
+
 addRowBtn.addEventListener('click', addRow);
-printBtn.addEventListener('click', () => window.print());
+printBtn.addEventListener('click', () => {
+  fitSheetToPaper();
+  window.print();
+});
 
 issueDate.valueAsDate = new Date();
 
