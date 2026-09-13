@@ -376,6 +376,10 @@ input:focus, textarea:focus {
   .site-footer { padding: 0 24px; }
 }
 
+@page {
+  size: portrait;
+}
+
 @media print {
   body { background: #fff; }
   .no-print { display: none !important; }
