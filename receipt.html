@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>간이영수증 작성</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="receipt.css">
+</head>
+<body>
+  <div class="toolbar no-print">
+    <div class="toolbar-title">
+      <a class="back-link no-print" href="index.html">← 처음으로</a>
+      <h1>간이영수증 작성</h1>
+    </div>
+    <div class="toolbar-actions">
+      <button id="addRowBtn" type="button">+ 품목 추가</button>
+      <button id="printBtn" type="button" class="primary">인쇄 / PDF 저장</button>
+    </div>
+  </div>
+
+  <main class="sheet receipt-sheet" id="sheet">
+    <header class="receipt-header">
+      <h2 class="doc-title">영 수 증<span class="doc-subtitle">(공급받는자용)</span></h2>
+    </header>
+
+    <div class="receipt-top">
+      <div class="receipt-no">
+        <span>NO.</span>
+        <input type="text" id="receiptNo" placeholder="번호">
+      </div>
+      <div class="receipt-to">
+        <input type="text" id="clientName" placeholder="상호명 입력">
+        <span>귀하</span>
+      </div>
+    </div>
+
+    <table class="receipt-info-table">
+      <tbody>
+        <tr>
+          <th rowspan="4" class="supplier-label"><span>공</span><span>급</span><span>자</span></th>
+          <th>사업자등록번호</th>
+          <td colspan="3"><input type="text" id="bizNumber" placeholder="000-00-00000"></td>
+        </tr>
+        <tr>
+          <th>상호</th>
+          <td><input type="text" id="supplierName" placeholder="상호"></td>
+          <th>성명</th>
+          <td class="signature-cell">
+            <input type="text" id="ownerName" placeholder="성명">
+            <div class="stamp-wrap">
+              <img id="stampPreview" class="stamp-preview" alt="도장/사인" hidden>
+              <label class="stamp-upload-btn no-print">
+                도장/사인 업로드
+                <input type="file" id="stampInput" accept="image/*" hidden>
+              </label>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <th>사업장 소재지</th>
+          <td colspan="3"><input type="text" id="bizAddress" placeholder="사업장 소재지"></td>
+        </tr>
+        <tr>
+          <th>업태</th>
+          <td><input type="text" id="bizType" placeholder="업태"></td>
+          <th>종목</th>
+          <td><input type="text" id="bizItem" placeholder="종목"></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table class="receipt-summary-table">
+      <tbody>
+        <tr>
+          <th>작성년월일</th>
+          <td><input type="date" id="issueDate"></td>
+          <th>공급대가 총액</th>
+          <td class="total-cell">₩ <span id="grandTotalDisplay">0</span></td>
+          <th>비고</th>
+          <td><input type="text" id="remark" placeholder="비고"></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="receipt-statement">
+      위 금액을
+      <label><input type="radio" name="receiptType" value="영수" checked> 영수</label>
+      <label><input type="radio" name="receiptType" value="청구"> 청구</label>
+      함.
+    </p>
+
+    <table class="items-table receipt-items-table" id="itemsTable">
+      <thead>
+        <tr>
+          <th class="col-date">월일</th>
+          <th class="col-name">품목</th>
+          <th class="col-qty">수량</th>
+          <th class="col-price">단가</th>
+          <th class="col-amount">금액</th>
+          <th class="col-del no-print"></th>
+        </tr>
+      </thead>
+      <tbody id="itemsBody"></tbody>
+      <tfoot>
+        <tr>
+          <th colspan="3" class="total-label">합 계</th>
+          <td colspan="2" class="total-cell">₩ <span id="tableTotalDisplay">0</span></td>
+          <td class="no-print"></td>
+        </tr>
+      </tfoot>
+    </table>
+  </main>
+
+  <footer class="site-footer no-print">
+    <a href="about.html">소개</a>
+    <a href="privacy.html">개인정보처리방침</a>
+    <a href="terms.html">이용약관</a>
+  </footer>
+
+  <template id="rowTemplate">
+    <tr class="item-row">
+      <td class="col-date"><input type="text" class="item-date" placeholder="월/일"></td>
+      <td class="col-name"><input type="text" class="item-name" placeholder="품목명"></td>
+      <td class="col-qty"><input type="number" class="item-qty" min="0" step="1" value="1"></td>
+      <td class="col-price"><input type="text" inputmode="numeric" class="item-price" value="0"></td>
+      <td class="col-amount"><span class="item-amount">0원</span></td>
+      <td class="col-del no-print"><button type="button" class="removeRowBtn" aria-label="삭제">✕</button></td>
+    </tr>
+  </template>
+
+  <script src="receipt.js"></script>
+</body>
+</html>

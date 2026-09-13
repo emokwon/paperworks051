@@ -1,0 +1,101 @@
+const itemsBody = document.getElementById('itemsBody');
+const rowTemplate = document.getElementById('rowTemplate');
+const addRowBtn = document.getElementById('addRowBtn');
+const printBtn = document.getElementById('printBtn');
+const issueDate = document.getElementById('issueDate');
+
+const subtotalDisplay = document.getElementById('subtotalDisplay');
+const vatDisplay = document.getElementById('vatDisplay');
+const totalDisplay = document.getElementById('totalDisplay');
+const grandTotalDisplay = document.getElementById('grandTotalDisplay');
+const depositRate = document.getElementById('depositRate');
+const depositAmountDisplay = document.getElementById('depositAmountDisplay');
+const balanceRate = document.getElementById('balanceRate');
+const balanceAmountDisplay = document.getElementById('balanceAmountDisplay');
+const stampInput = document.getElementById('stampInput');
+const stampPreview = document.getElementById('stampPreview');
+
+const won = (n) => Math.round(n).toLocaleString('ko-KR') + '원';
+const parseNumber = (str) => parseFloat(String(str).replace(/,/g, '')) || 0;
+
+function formatPriceInput(input) {
+  const digits = input.value.replace(/[^0-9]/g, '');
+  input.value = digits === '' ? '' : Number(digits).toLocaleString('ko-KR');
+}
+
+function addRow() {
+  const fragment = rowTemplate.content.cloneNode(true);
+  itemsBody.appendChild(fragment);
+  renumberRows();
+  recalcTotals();
+}
+
+function renumberRows() {
+  [...itemsBody.querySelectorAll('.item-row')].forEach((row, i) => {
+    row.querySelector('.row-index').textContent = i + 1;
+  });
+}
+
+function recalcTotals() {
+  let subtotal = 0;
+  itemsBody.querySelectorAll('.item-row').forEach((row) => {
+    const qty = parseFloat(row.querySelector('.item-qty').value) || 0;
+    const price = parseNumber(row.querySelector('.item-price').value);
+    const amount = qty * price;
+    row.querySelector('.item-amount').textContent = won(amount);
+    subtotal += amount;
+  });
+  const vat = subtotal * 0.1;
+  const total = subtotal + vat;
+
+  subtotalDisplay.textContent = won(subtotal);
+  vatDisplay.textContent = won(vat);
+  totalDisplay.textContent = won(total);
+  grandTotalDisplay.textContent = won(total);
+
+  const rate = Math.min(100, Math.max(0, parseFloat(depositRate.value) || 0));
+  depositAmountDisplay.textContent = won(total * (rate / 100));
+
+  const bRate = Math.min(100, Math.max(0, parseFloat(balanceRate.value) || 0));
+  balanceAmountDisplay.textContent = won(total * (bRate / 100));
+}
+
+itemsBody.addEventListener('input', (e) => {
+  if (e.target.classList.contains('item-price')) {
+    formatPriceInput(e.target);
+    recalcTotals();
+  } else if (e.target.classList.contains('item-qty')) {
+    recalcTotals();
+  }
+});
+
+itemsBody.addEventListener('click', (e) => {
+  if (e.target.classList.contains('removeRowBtn')) {
+    e.target.closest('.item-row').remove();
+    renumberRows();
+    recalcTotals();
+  }
+});
+
+stampInput.addEventListener('change', () => {
+  const file = stampInput.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    stampPreview.src = reader.result;
+    stampPreview.hidden = false;
+  };
+  reader.readAsDataURL(file);
+});
+
+addRowBtn.addEventListener('click', addRow);
+depositRate.addEventListener('input', recalcTotals);
+balanceRate.addEventListener('input', recalcTotals);
+printBtn.addEventListener('click', () => window.print());
+
+issueDate.valueAsDate = new Date();
+
+// start with 3 blank rows
+addRow();
+addRow();
+addRow();

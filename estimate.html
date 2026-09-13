@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>견적서 작성</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="toolbar no-print">
+    <div class="toolbar-title">
+      <a class="back-link no-print" href="index.html">← 처음으로</a>
+      <h1>견적서 작성</h1>
+    </div>
+    <div class="toolbar-actions">
+      <button id="addRowBtn" type="button">+ 품목 추가</button>
+      <button id="printBtn" type="button" class="primary">인쇄 / PDF 저장</button>
+    </div>
+  </div>
+
+  <main class="sheet" id="sheet">
+    <header class="sheet-header">
+      <h2 class="doc-title">견 적 서</h2>
+      <div class="doc-date">
+        <label>작성일
+          <input type="date" id="issueDate">
+        </label>
+      </div>
+    </header>
+
+    <section class="parties">
+      <div class="party">
+        <h3>공급받는자 (고객)</h3>
+        <label>고객명 <input type="text" id="clientCompany" placeholder="고객명 입력"></label>
+        <label>담당자 <input type="text" id="clientContact" placeholder="담당자명"></label>
+        <label>연락처 <input type="text" id="clientPhone" placeholder="010-0000-0000"></label>
+        <label>배송받을 주소 <input type="text" id="clientAddress" placeholder="배송받을 주소 입력"></label>
+      </div>
+      <div class="party">
+        <h3>공급자 (본사)</h3>
+        <div class="company-name-row">
+          <label class="grow">회사명 <input type="text" id="supplierCompany" placeholder="회사명 입력"></label>
+          <div class="stamp-wrap">
+            <img id="stampPreview" class="stamp-preview" alt="도장/사인" hidden>
+            <label class="stamp-upload-btn no-print">
+              도장/사인 업로드
+              <input type="file" id="stampInput" accept="image/*" hidden>
+            </label>
+          </div>
+        </div>
+        <label>담당자 <input type="text" id="supplierContact" placeholder="담당자명"></label>
+        <label>연락처 <input type="text" id="supplierPhone" placeholder="010-0000-0000"></label>
+        <label>회사 주소 <input type="text" id="supplierAddress" placeholder="회사 주소 입력"></label>
+      </div>
+    </section>
+
+    <section class="total-banner">
+      <span>합계 금액 (VAT 포함)</span>
+      <strong id="grandTotalDisplay">0원</strong>
+    </section>
+
+    <table class="items-table" id="itemsTable">
+      <thead>
+        <tr>
+          <th class="col-no">No</th>
+          <th class="col-name">품목</th>
+          <th class="col-desc">규격/설명</th>
+          <th class="col-qty">수량</th>
+          <th class="col-price">단가</th>
+          <th class="col-amount">금액</th>
+          <th class="col-del no-print"></th>
+        </tr>
+      </thead>
+      <tbody id="itemsBody"></tbody>
+    </table>
+
+    <section class="summary">
+      <div class="summary-row">
+        <span>공급가액</span>
+        <span id="subtotalDisplay">0원</span>
+      </div>
+      <div class="summary-row">
+        <span>부가세 (10%)</span>
+        <span id="vatDisplay">0원</span>
+      </div>
+      <div class="summary-row grand">
+        <span>합계</span>
+        <span id="totalDisplay">0원</span>
+      </div>
+    </section>
+
+    <section class="deposit">
+      <div class="deposit-row">
+        <label>계약금 비율 (%)
+          <input type="number" id="depositRate" min="0" max="100" step="1" value="0">
+        </label>
+        <div class="deposit-amount">계약금 금액 <strong id="depositAmountDisplay">0원</strong></div>
+      </div>
+      <div class="deposit-row">
+        <label>잔금 비율 (%)
+          <input type="number" id="balanceRate" min="0" max="100" step="1" value="0">
+        </label>
+        <div class="deposit-amount">잔금 금액 <strong id="balanceAmountDisplay">0원</strong></div>
+      </div>
+      <label>입금 계좌번호
+        <input type="text" id="depositAccount" placeholder="예: 국민은행 000-00-0000-000 (예금주: 홍길동)">
+      </label>
+    </section>
+
+    <section class="notes">
+      <label>비고
+        <textarea id="notes" rows="3" placeholder="예: 견적 유효기간 30일, 부가세 별도 등"></textarea>
+      </label>
+    </section>
+  </main>
+
+  <footer class="site-footer no-print">
+    <a href="about.html">소개</a>
+    <a href="privacy.html">개인정보처리방침</a>
+    <a href="terms.html">이용약관</a>
+  </footer>
+
+  <template id="rowTemplate">
+    <tr class="item-row">
+      <td class="col-no row-index"></td>
+      <td class="col-name"><input type="text" class="item-name" placeholder="품목명"></td>
+      <td class="col-desc"><input type="text" class="item-desc" placeholder="규격/설명"></td>
+      <td class="col-qty"><input type="number" class="item-qty" min="0" step="1" value="1"></td>
+      <td class="col-price"><input type="text" inputmode="numeric" class="item-price" value="0"></td>
+      <td class="col-amount"><span class="item-amount">0원</span></td>
+      <td class="col-del no-print"><button type="button" class="removeRowBtn" aria-label="삭제">✕</button></td>
+    </tr>
+  </template>
+
+  <script src="script.js"></script>
+</body>
+</html>

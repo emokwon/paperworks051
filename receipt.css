@@ -1,0 +1,130 @@
+.receipt-header {
+  text-align: center;
+  border-bottom: 3px solid var(--ink);
+  padding-bottom: 16px;
+  margin-bottom: 24px;
+}
+
+.receipt-header .doc-title {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.doc-subtitle {
+  font-size: 13px;
+  letter-spacing: 0;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.receipt-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.receipt-no, .receipt-to {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.receipt-no input {
+  width: 90px;
+}
+
+.receipt-to input {
+  width: 200px;
+  text-align: right;
+}
+
+.receipt-info-table, .receipt-summary-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 16px;
+}
+
+.receipt-info-table th, .receipt-info-table td,
+.receipt-summary-table th, .receipt-summary-table td {
+  border: 1px solid var(--line);
+  padding: 8px 10px;
+  font-size: 13px;
+}
+
+.receipt-info-table th, .receipt-summary-table th {
+  background: #f5f6f9;
+  color: var(--muted);
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.supplier-label {
+  text-align: center;
+}
+
+.supplier-label span {
+  display: block;
+}
+
+.receipt-info-table input, .receipt-summary-table input {
+  width: 100%;
+  border: none;
+  padding: 4px;
+}
+
+.signature-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.signature-cell input {
+  flex: 1;
+}
+
+.signature-cell .stamp-wrap { flex-direction: row; }
+.signature-cell .stamp-preview { width: 40px; height: 40px; }
+
+.total-cell {
+  font-weight: 700;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.receipt-statement {
+  text-align: center;
+  font-size: 14px;
+  margin: 20px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.receipt-statement label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.receipt-items-table tfoot .total-label {
+  background: #f5f6f9;
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.receipt-items-table tfoot .total-cell {
+  text-align: center;
+}
+
+.col-date { width: 70px; }
+
+@media (max-width: 700px) {
+  .receipt-top { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .receipt-to input { width: 100%; text-align: left; }
+}
