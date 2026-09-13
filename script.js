@@ -97,8 +97,11 @@ function fitSheetToOnePage() {
   // though it renders smaller. `zoom` actually resizes the layout box,
   // so pagination sees the shrunk size too.
   sheet.style.zoom = '';
-  sheet.style.width = '';
 
+  // .sheet already fills the full page width on its own (max-width:none in
+  // print), so zoom alone shrinks both dimensions correctly — no separate
+  // width compensation needed (combining it with a percentage width caused
+  // the box to render wider than the page and get clipped horizontally).
   const pxPerMm = 96 / 25.4;
   const pageHeightMm = 297; // A4 portrait
   const pageMarginMm = 24; // matches @page margin (12mm top + 12mm bottom)
@@ -106,14 +109,12 @@ function fitSheetToOnePage() {
 
   if (sheet.scrollHeight > availablePx) {
     const scale = availablePx / sheet.scrollHeight;
-    sheet.style.width = `${100 / scale}%`;
     sheet.style.zoom = scale;
   }
 }
 
 function resetSheetScale() {
   sheet.style.zoom = '';
-  sheet.style.width = '';
 }
 
 window.addEventListener('beforeprint', fitSheetToOnePage);
