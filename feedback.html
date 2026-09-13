@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1932823509799881"
+     crossorigin="anonymous"></script>
+<title>건의하기 | 무료 문서 양식</title>
+<meta name="description" content="무료 문서 양식 사이트에 개선 제안이나 버그를 알려주세요.">
+<link rel="canonical" href="https://www.paperworks051.kr/feedback.html">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="info.css">
+</head>
+<body>
+  <div class="toolbar no-print">
+    <div class="toolbar-title">
+      <a class="back-link" href="index.html">← 처음으로</a>
+      <h1>건의하기</h1>
+    </div>
+  </div>
+
+  <main class="sheet info-sheet">
+    <h2>건의사항 남기기</h2>
+    <p>
+      불편한 점, 추가됐으면 하는 기능, 오류 제보 등 무엇이든 편하게 남겨주세요.
+      답장이 필요하시면 이메일을 함께 적어주세요.
+    </p>
+
+    <div id="thanksMessage" class="feedback-thanks" hidden>
+      <p><strong>건의해주셔서 감사합니다!</strong> 소중한 의견 잘 확인하겠습니다.</p>
+      <p><a href="index.html">처음으로 돌아가기</a></p>
+    </div>
+
+    <form id="feedbackForm" action="https://formspree.io/f/xjyvqkeq" method="POST">
+      <input type="hidden" name="_subject" value="[무료 문서 양식] 건의사항 도착">
+      <input type="hidden" name="_next" value="https://www.paperworks051.kr/feedback.html?sent=1">
+      <input type="text" name="_gotcha" style="display:none">
+
+      <label class="feedback-label">
+        이름 (선택)
+        <input type="text" name="name" placeholder="이름 또는 닉네임">
+      </label>
+
+      <label class="feedback-label">
+        답장받을 이메일 (선택)
+        <input type="email" name="email" placeholder="example@email.com">
+      </label>
+
+      <label class="feedback-label">
+        건의 내용 <span class="required">*</span>
+        <textarea name="message" rows="6" required placeholder="예: 견적서에 OO 항목이 있으면 좋겠어요 / OO 기능이 안 돼요"></textarea>
+      </label>
+
+      <button type="submit" class="cta-btn">건의사항 보내기</button>
+    </form>
+  </main>
+
+  <footer class="site-footer no-print">
+    <a href="feedback.html">건의하기</a>
+    <a href="about.html">소개</a>
+    <a href="privacy.html">개인정보처리방침</a>
+    <a href="terms.html">이용약관</a>
+  </footer>
+
+  <script src="feedback.js"></script>
+</body>
+</html>

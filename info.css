@@ -32,3 +32,34 @@
   color: var(--muted);
   margin-bottom: 24px;
 }
+
+.feedback-label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+
+.feedback-label textarea {
+  resize: vertical;
+  font-family: inherit;
+}
+
+.feedback-label .required {
+  color: #d64545;
+}
+
+.feedback-thanks {
+  background: var(--accent-soft);
+  border-radius: 8px;
+  padding: 20px 24px;
+}
+
+.feedback-thanks p {
+  color: var(--ink);
+  margin: 0 0 8px;
+}
+
+.feedback-thanks p:last-child { margin-bottom: 0; }

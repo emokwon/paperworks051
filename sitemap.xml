@@ -26,6 +26,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.paperworks051.kr/feedback.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  <url>
     <loc>https://www.paperworks051.kr/about.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
