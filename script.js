@@ -91,7 +91,12 @@ stampInput.addEventListener('change', () => {
 const sheet = document.getElementById('sheet');
 
 function fitSheetToOnePage() {
-  sheet.style.transform = 'none';
+  // Uses `zoom` rather than `transform: scale()` — print page-break
+  // calculations in Chrome/Edge are based on the untransformed layout size,
+  // so a transform-scaled box still overflows onto a second page even
+  // though it renders smaller. `zoom` actually resizes the layout box,
+  // so pagination sees the shrunk size too.
+  sheet.style.zoom = '';
   sheet.style.width = '';
 
   const pxPerMm = 96 / 25.4;
@@ -101,14 +106,13 @@ function fitSheetToOnePage() {
 
   if (sheet.scrollHeight > availablePx) {
     const scale = availablePx / sheet.scrollHeight;
-    sheet.style.transformOrigin = 'top left';
-    sheet.style.transform = `scale(${scale})`;
     sheet.style.width = `${100 / scale}%`;
+    sheet.style.zoom = scale;
   }
 }
 
 function resetSheetScale() {
-  sheet.style.transform = 'none';
+  sheet.style.zoom = '';
   sheet.style.width = '';
 }
 

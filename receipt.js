@@ -65,7 +65,11 @@ stampInput.addEventListener('change', () => {
 const sheet = document.getElementById('sheet');
 
 function fitSheetToPaper() {
-  sheet.style.transform = 'none';
+  // Uses `zoom` rather than `transform: scale()` — print/PDF overflow and
+  // page-break decisions in Chrome/Edge are based on the untransformed
+  // layout size, so a transform-scaled box can still overflow the outline
+  // even though it renders smaller. `zoom` actually resizes the layout box.
+  sheet.style.zoom = '';
 
   // sheet is forced to its full design width (860px) in print CSS, regardless
   // of the tiny 48절 outline size, so scrollWidth/scrollHeight here reflect the
@@ -84,13 +88,12 @@ function fitSheetToPaper() {
 
   const scale = Math.min(availableWidthPx / naturalWidth, availableHeightPx / naturalHeight, 1);
   if (scale < 1) {
-    sheet.style.transformOrigin = 'top left';
-    sheet.style.transform = `scale(${scale})`;
+    sheet.style.zoom = scale;
   }
 }
 
 function resetSheetScale() {
-  sheet.style.transform = 'none';
+  sheet.style.zoom = '';
 }
 
 window.addEventListener('beforeprint', fitSheetToPaper);
