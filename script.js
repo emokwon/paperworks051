@@ -88,10 +88,40 @@ stampInput.addEventListener('change', () => {
   reader.readAsDataURL(file);
 });
 
+const sheet = document.getElementById('sheet');
+
+function fitSheetToOnePage() {
+  sheet.style.transform = 'none';
+  sheet.style.width = '';
+
+  const pxPerMm = 96 / 25.4;
+  const pageHeightMm = 297; // A4 portrait
+  const pageMarginMm = 24; // matches @page margin (12mm top + 12mm bottom)
+  const availablePx = (pageHeightMm - pageMarginMm) * pxPerMm;
+
+  if (sheet.scrollHeight > availablePx) {
+    const scale = availablePx / sheet.scrollHeight;
+    sheet.style.transformOrigin = 'top left';
+    sheet.style.transform = `scale(${scale})`;
+    sheet.style.width = `${100 / scale}%`;
+  }
+}
+
+function resetSheetScale() {
+  sheet.style.transform = 'none';
+  sheet.style.width = '';
+}
+
+window.addEventListener('beforeprint', fitSheetToOnePage);
+window.addEventListener('afterprint', resetSheetScale);
+
 addRowBtn.addEventListener('click', addRow);
 depositRate.addEventListener('input', recalcTotals);
 balanceRate.addEventListener('input', recalcTotals);
-printBtn.addEventListener('click', () => window.print());
+printBtn.addEventListener('click', () => {
+  fitSheetToOnePage();
+  window.print();
+});
 
 issueDate.valueAsDate = new Date();
 
