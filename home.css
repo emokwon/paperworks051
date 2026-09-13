@@ -97,6 +97,22 @@ body {
   line-height: 1.5;
 }
 
+.home-guides {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+
+.home-guides a {
+  font-size: 13px;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.home-guides a:hover { color: var(--accent); }
+
 @media (max-width: 560px) {
   .home-cards { grid-template-columns: 1fr; }
 }

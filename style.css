@@ -338,6 +338,19 @@ input:focus, textarea:focus {
   color: var(--muted);
 }
 
+.cta-btn {
+  display: inline-block;
+  padding: 12px 28px;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.cta-btn:hover { filter: brightness(0.95); }
+
 .site-footer {
   max-width: 860px;
   margin: 0 auto 48px;
