@@ -84,9 +84,98 @@ stampInput.addEventListener('change', () => {
   reader.onload = () => {
     stampPreview.src = reader.result;
     stampPreview.hidden = false;
+    saveDraft();
   };
   reader.readAsDataURL(file);
 });
+
+// --- 임시저장 (localStorage) ---
+const DRAFT_KEY = 'estimateDraft_v1';
+const DRAFT_FIELD_IDS = [
+  'clientCompany', 'clientContact', 'clientPhone', 'clientAddress',
+  'supplierCompany', 'supplierBizNumber', 'supplierPhone', 'supplierAddress',
+  'issueDate', 'depositRate', 'balanceRate', 'depositAccount', 'notes',
+];
+
+function collectDraft() {
+  const fields = {};
+  DRAFT_FIELD_IDS.forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) fields[id] = el.value;
+  });
+
+  const items = [...itemsBody.querySelectorAll('.item-row')].map((row) => ({
+    name: row.querySelector('.item-name').value,
+    desc: row.querySelector('.item-desc').value,
+    qty: row.querySelector('.item-qty').value,
+    price: row.querySelector('.item-price').value,
+  }));
+
+  const stamp = stampPreview.hidden ? null : stampPreview.src;
+
+  return { fields, items, stamp };
+}
+
+function saveDraft() {
+  try {
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(collectDraft()));
+  } catch (err) {
+    // localStorage unavailable (private mode, quota, etc.) — silently skip
+  }
+}
+
+let saveTimer = null;
+function scheduleSaveDraft() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(saveDraft, 400);
+}
+
+function loadDraft() {
+  let draft;
+  try {
+    const raw = localStorage.getItem(DRAFT_KEY);
+    if (!raw) return false;
+    draft = JSON.parse(raw);
+  } catch (err) {
+    return false;
+  }
+  if (!draft) return false;
+
+  DRAFT_FIELD_IDS.forEach((id) => {
+    const el = document.getElementById(id);
+    if (el && draft.fields && draft.fields[id] !== undefined) {
+      el.value = draft.fields[id];
+    }
+  });
+
+  if (Array.isArray(draft.items) && draft.items.length > 0) {
+    itemsBody.innerHTML = '';
+    draft.items.forEach((item) => {
+      addRow();
+      const row = itemsBody.lastElementChild;
+      row.querySelector('.item-name').value = item.name || '';
+      row.querySelector('.item-desc').value = item.desc || '';
+      row.querySelector('.item-qty').value = item.qty || '1';
+      row.querySelector('.item-price').value = item.price || '0';
+    });
+  }
+
+  if (draft.stamp) {
+    stampPreview.src = draft.stamp;
+    stampPreview.hidden = false;
+  }
+
+  recalcTotals();
+  return true;
+}
+
+function clearDraft() {
+  if (!confirm('임시저장된 내용을 지우고 새로 작성하시겠습니까?')) return;
+  localStorage.removeItem(DRAFT_KEY);
+  location.reload();
+}
+
+document.addEventListener('input', scheduleSaveDraft);
 
 const sheet = document.getElementById('sheet');
 
@@ -128,9 +217,14 @@ printBtn.addEventListener('click', () => {
   window.print();
 });
 
-issueDate.valueAsDate = new Date();
+const clearDraftBtn = document.getElementById('clearDraftBtn');
+if (clearDraftBtn) clearDraftBtn.addEventListener('click', clearDraft);
 
-// start with 3 blank rows
-addRow();
-addRow();
-addRow();
+const restored = loadDraft();
+if (!restored) {
+  issueDate.valueAsDate = new Date();
+  // start with 3 blank rows
+  addRow();
+  addRow();
+  addRow();
+}
