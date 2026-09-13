@@ -129,13 +129,23 @@
   .receipt-to input { width: 100%; text-align: left; }
 }
 
-/* 48절 실물 영수증 용지 규격 (86 x 185mm) */
+/* A4 용지에 48절 실물 영수증 규격(86 x 185mm) 재단선을 출력 */
 @page {
-  size: 86mm 185mm;
-  margin: 4mm;
+  size: A4 portrait;
+  margin: 15mm;
 }
 
 @media print {
+  .print-outline {
+    width: 86mm;
+    height: 185mm;
+    margin: 0 auto;
+    padding: 4mm;
+    border: 1px dashed #000;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
   .receipt-sheet {
     width: 860px;
     max-width: none;

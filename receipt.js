@@ -68,15 +68,16 @@ function fitSheetToPaper() {
   sheet.style.transform = 'none';
 
   // sheet is forced to its full design width (860px) in print CSS, regardless
-  // of the tiny 48절 paper size, so scrollWidth/scrollHeight here reflect the
-  // true, unsquashed layout before we shrink it to fit.
+  // of the tiny 48절 outline size, so scrollWidth/scrollHeight here reflect the
+  // true, unsquashed layout before we shrink it to fit inside the cut outline
+  // printed on the A4 page.
   const pxPerMm = 96 / 25.4;
-  const pageWidthMm = 86; // 48절 실물 영수증 용지
-  const pageHeightMm = 185;
-  const pageMarginMm = 8; // matches @page margin: 4mm on each side
+  const outlineWidthMm = 86; // 48절 실물 영수증 규격
+  const outlineHeightMm = 185;
+  const outlinePaddingMm = 8; // matches .print-outline padding: 4mm on each side
 
-  const availableWidthPx = (pageWidthMm - pageMarginMm) * pxPerMm;
-  const availableHeightPx = (pageHeightMm - pageMarginMm) * pxPerMm;
+  const availableWidthPx = (outlineWidthMm - outlinePaddingMm) * pxPerMm;
+  const availableHeightPx = (outlineHeightMm - outlinePaddingMm) * pxPerMm;
 
   const naturalWidth = sheet.scrollWidth;
   const naturalHeight = sheet.scrollHeight;
