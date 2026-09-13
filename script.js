@@ -178,6 +178,19 @@ function clearDraft() {
 document.addEventListener('input', scheduleSaveDraft);
 
 const sheet = document.getElementById('sheet');
+let autoFilledRowCount = 0;
+
+function removeAutoFilledRows() {
+  while (autoFilledRowCount > 0) {
+    const rows = itemsBody.querySelectorAll('.item-row');
+    const last = rows[rows.length - 1];
+    if (!last) break;
+    last.remove();
+    autoFilledRowCount--;
+  }
+  renumberRows();
+  recalcTotals();
+}
 
 function fitSheetToOnePage() {
   // Uses `zoom` rather than `transform: scale()` — print page-break
@@ -186,6 +199,7 @@ function fitSheetToOnePage() {
   // though it renders smaller. `zoom` actually resizes the layout box,
   // so pagination sees the shrunk size too.
   sheet.style.zoom = '';
+  removeAutoFilledRows();
 
   // .sheet already fills the full page width on its own (max-width:none in
   // print), so zoom alone shrinks both dimensions correctly — no separate
@@ -196,14 +210,27 @@ function fitSheetToOnePage() {
   const pageMarginMm = 24; // matches @page margin (12mm top + 12mm bottom)
   const availablePx = (pageHeightMm - pageMarginMm) * pxPerMm;
 
-  if (sheet.scrollHeight > availablePx) {
-    const scale = availablePx / sheet.scrollHeight;
+  // If there's blank space left on the page, fill it by adding more blank
+  // item rows (same row height as the rest) instead of stretching anything.
+  let currentHeight = sheet.scrollHeight;
+  while (currentHeight < availablePx && autoFilledRowCount < 200) {
+    addRow();
+    autoFilledRowCount++;
+    currentHeight = sheet.scrollHeight;
+  }
+
+  // Only a small residual overflow should remain at this point (from the
+  // last row added slightly overshooting the page) — shrink just enough to
+  // bring it back to exactly one page.
+  if (currentHeight > availablePx) {
+    const scale = availablePx / currentHeight;
     sheet.style.zoom = scale;
   }
 }
 
 function resetSheetScale() {
   sheet.style.zoom = '';
+  removeAutoFilledRows();
 }
 
 window.addEventListener('beforeprint', fitSheetToOnePage);
