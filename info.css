@@ -63,3 +63,19 @@
 }
 
 .feedback-thanks p:last-child { margin-bottom: 0; }
+
+.link-row {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+  font-size: 13px;
+}
+
+.link-row a {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.link-row a:hover { color: var(--accent); }
