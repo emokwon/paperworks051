@@ -250,8 +250,6 @@ if (clearDraftBtn) clearDraftBtn.addEventListener('click', clearDraft);
 const restored = loadDraft();
 if (!restored) {
   issueDate.valueAsDate = new Date();
-  // start with 3 blank rows
-  addRow();
-  addRow();
-  addRow();
+  // start with enough blank rows to fill a printed A4 page by default
+  for (let i = 0; i < 10; i++) addRow();
 }
