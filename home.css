@@ -39,7 +39,7 @@ body {
 .home {
   margin: auto;
   padding: 48px 24px;
-  max-width: 720px;
+  max-width: 960px;
   width: 100%;
   text-align: center;
 }
@@ -57,7 +57,7 @@ body {
 
 .home-cards {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 20px;
 }
 

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-HQBQNZYNZG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-HQBQNZYNZG');
+</script>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1932823509799881"
+     crossorigin="anonymous"></script>
+<title>무료 거래명세서 양식 - 자동 계산 | 무료 문서 양식</title>
+<meta name="description" content="공급자·공급받는자 사업자 정보와 품목 내역을 입력하면 공급가액·부가세·합계까지 자동 계산되는 무료 거래명세서 양식. 도장/사인 업로드 후 바로 인쇄·PDF로 저장하세요.">
+<link rel="canonical" href="https://www.paperworks051.kr/statement.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content="무료 문서 양식">
+<meta property="og:title" content="무료 거래명세서 양식 - 자동 계산">
+<meta property="og:description" content="공급자·공급받는자 정보와 품목 내역을 입력하면 공급가액·부가세·합계까지 자동 계산되는 무료 거래명세서 양식.">
+<meta property="og:url" content="https://www.paperworks051.kr/statement.html">
+<meta property="og:image" content="https://www.paperworks051.kr/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "무료 거래명세서 양식",
+  "url": "https://www.paperworks051.kr/statement.html",
+  "description": "공급자·공급받는자 정보와 품목 내역을 입력하면 공급가액·부가세·합계까지 자동 계산되는 무료 거래명세서 양식.",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Any",
+  "inLanguage": "ko",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "KRW"
+  }
+}
+</script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="toolbar no-print">
+    <div class="toolbar-title">
+      <a class="back-link no-print" href="index.html">← 처음으로</a>
+      <h1>거래명세서 작성</h1>
+    </div>
+    <div class="toolbar-actions">
+      <button id="clearDraftBtn" type="button" class="no-print">초기화</button>
+      <button id="addRowBtn" type="button">+ 품목 추가</button>
+      <button id="printBtn" type="button" class="primary">인쇄 / PDF 저장</button>
+    </div>
+  </div>
+
+  <main class="sheet" id="sheet">
+    <header class="sheet-header">
+      <h2 class="doc-title">거래명세서</h2>
+      <div class="doc-date">
+        <label>거래일자
+          <input type="date" id="issueDate">
+        </label>
+      </div>
+    </header>
+
+    <section class="parties">
+      <div class="party">
+        <h3>공급자</h3>
+        <label>사업자등록번호 <input type="text" id="supplierBizNumber" placeholder="000-00-00000"></label>
+        <label>상호 <input type="text" id="supplierCompany" placeholder="상호 입력"></label>
+        <div class="company-name-row">
+          <label class="grow">성명 <input type="text" id="supplierOwnerName" placeholder="대표자명"></label>
+          <div class="stamp-wrap">
+            <img id="stampPreview" class="stamp-preview" alt="도장/사인" hidden>
+            <label class="stamp-upload-btn no-print">
+              도장/사인 업로드
+              <input type="file" id="stampInput" accept="image/*" hidden>
+            </label>
+          </div>
+        </div>
+        <label>사업장 주소 <input type="text" id="supplierAddress" placeholder="사업장 주소 입력"></label>
+        <label>업태 <input type="text" id="supplierBizType" placeholder="업태"></label>
+        <label>종목 <input type="text" id="supplierBizItem" placeholder="종목"></label>
+      </div>
+      <div class="party">
+        <h3>공급받는자</h3>
+        <label>사업자등록번호 <input type="text" id="clientBizNumber" placeholder="000-00-00000"></label>
+        <label>상호 <input type="text" id="clientCompany" placeholder="상호 입력"></label>
+        <label>성명 <input type="text" id="clientOwnerName" placeholder="대표자명"></label>
+        <label>사업장 주소 <input type="text" id="clientAddress" placeholder="사업장 주소 입력"></label>
+        <label>업태 <input type="text" id="clientBizType" placeholder="업태"></label>
+        <label>종목 <input type="text" id="clientBizItem" placeholder="종목"></label>
+      </div>
+    </section>
+
+    <section class="total-banner">
+      <span>합계 금액 (VAT 포함)</span>
+      <strong id="grandTotalDisplay">0원</strong>
+    </section>
+
+    <table class="items-table" id="itemsTable">
+      <thead>
+        <tr>
+          <th class="col-date">월일</th>
+          <th class="col-name">품목</th>
+          <th class="col-desc">규격</th>
+          <th class="col-qty">수량</th>
+          <th class="col-price">단가</th>
+          <th class="col-amount">금액</th>
+          <th class="col-del no-print"></th>
+        </tr>
+      </thead>
+      <tbody id="itemsBody"></tbody>
+    </table>
+
+    <section class="summary">
+      <div class="summary-row">
+        <span>공급가액</span>
+        <span id="subtotalDisplay">0원</span>
+      </div>
+      <div class="summary-row">
+        <span>부가세 (10%)</span>
+        <span id="vatDisplay">0원</span>
+      </div>
+      <div class="summary-row grand">
+        <span>합계</span>
+        <span id="totalDisplay">0원</span>
+      </div>
+    </section>
+
+    <section class="notes">
+      <label>비고
+        <textarea id="notes" rows="3" placeholder="예: 대금 결제 조건, 납품 장소 등"></textarea>
+      </label>
+    </section>
+  </main>
+
+  <template id="rowTemplate">
+    <tr class="item-row">
+      <td class="col-date"><input type="text" class="item-date" placeholder="월/일"></td>
+      <td class="col-name"><input type="text" class="item-name" placeholder="품목명"></td>
+      <td class="col-desc"><input type="text" class="item-desc" placeholder="규격"></td>
+      <td class="col-qty"><input type="number" class="item-qty" min="0" step="1" value="1"></td>
+      <td class="col-price"><input type="text" inputmode="numeric" class="item-price" value="0"></td>
+      <td class="col-amount"><span class="item-amount">0원</span></td>
+      <td class="col-del no-print"><button type="button" class="removeRowBtn" aria-label="삭제">✕</button></td>
+    </tr>
+  </template>
+
+  <footer class="site-footer no-print">
+    <a href="feedback.html">건의하기</a>
+    <a href="about.html">소개</a>
+    <a href="privacy.html">개인정보처리방침</a>
+    <a href="terms.html">이용약관</a>
+  </footer>
+
+  <script src="statement.js"></script>
+</body>
+</html>
