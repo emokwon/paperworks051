@@ -45,10 +45,19 @@ function renumberRows() {
 function recalcTotals() {
   let subtotal = 0;
   itemsBody.querySelectorAll('.item-row').forEach((row) => {
-    const qty = parseFloat(row.querySelector('.item-qty').value) || 0;
-    const price = parseNumber(row.querySelector('.item-price').value);
+    const qtyInput = row.querySelector('.item-qty');
+    const priceInput = row.querySelector('.item-price');
+    const qtyRaw = qtyInput.value.trim();
+    const qty = parseFloat(qtyRaw) || 0;
+    const isEmptyQty = qtyRaw === '' || qty === 0;
+
+    if (isEmptyQty && document.activeElement !== priceInput) {
+      priceInput.value = '';
+    }
+
+    const price = parseNumber(priceInput.value);
     const amount = qty * price;
-    row.querySelector('.item-amount').textContent = won(amount);
+    row.querySelector('.item-amount').textContent = isEmptyQty ? '' : won(amount);
     subtotal += amount;
   });
   const vat = subtotal * 0.1;
@@ -71,6 +80,12 @@ itemsBody.addEventListener('input', (e) => {
     formatPriceInput(e.target);
     recalcTotals();
   } else if (e.target.classList.contains('item-qty')) {
+    recalcTotals();
+  }
+});
+
+itemsBody.addEventListener('focusout', (e) => {
+  if (e.target.classList.contains('item-price') || e.target.classList.contains('item-qty')) {
     recalcTotals();
   }
 });
