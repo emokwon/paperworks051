@@ -54,6 +54,9 @@ function recalcTotals() {
     if (isEmptyQty && document.activeElement !== priceInput) {
       priceInput.value = '';
     }
+    if (qty === 0 && document.activeElement !== qtyInput) {
+      qtyInput.value = '';
+    }
 
     const price = parseNumber(priceInput.value);
     const amount = qty * price;
