@@ -242,8 +242,8 @@ input:focus, textarea:focus {
 .col-del { width: 36px; }
 
 /* 견적서 전용: 품목/규격 칸 폭을 조정하고 단가/금액 칸을 넓힘 (영수증/거래명세서는 영향 없음) */
-.items-table--estimate .col-name { width: 191px; }
-.items-table--estimate .col-desc { width: 95px; }
+.items-table--estimate .col-name { width: 143px; }
+.items-table--estimate .col-desc { width: 143px; }
 .items-table--estimate .col-price { width: 156px; }
 .items-table--estimate .col-amount { width: 170px; }
 
