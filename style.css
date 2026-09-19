@@ -241,6 +241,11 @@ input:focus, textarea:focus {
 .col-amount { width: 120px; }
 .col-del { width: 36px; }
 
+/* 견적서 전용: 품목 칸 폭을 줄이고 단가/금액 칸을 넓힘 (영수증/거래명세서는 영향 없음) */
+.items-table--estimate .col-name { width: 96px; }
+.items-table--estimate .col-price { width: 156px; }
+.items-table--estimate .col-amount { width: 170px; }
+
 .item-amount { font-variant-numeric: tabular-nums; }
 
 .removeRowBtn {
@@ -393,5 +398,8 @@ input:focus, textarea:focus {
   input, textarea {
     border: none;
     padding: 2px;
+  }
+  input::placeholder, textarea::placeholder {
+    color: transparent;
   }
 }

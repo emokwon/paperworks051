@@ -19,8 +19,14 @@ const won = (n) => Math.round(n).toLocaleString('ko-KR') + '원';
 const parseNumber = (str) => parseFloat(String(str).replace(/,/g, '')) || 0;
 
 function formatPriceInput(input) {
+  const isNegative = input.value.trim().startsWith('-');
   const digits = input.value.replace(/[^0-9]/g, '');
-  input.value = digits === '' ? '' : Number(digits).toLocaleString('ko-KR');
+  if (digits === '') {
+    input.value = isNegative ? '-' : '';
+    return;
+  }
+  const sign = isNegative ? '-' : '';
+  input.value = sign + Number(digits).toLocaleString('ko-KR');
 }
 
 function addRow() {
