@@ -375,11 +375,23 @@ input:focus, textarea:focus {
 
 .site-footer a:hover { color: var(--accent); }
 
+.tool-intro {
+  max-width: 860px;
+  margin: 20px auto 0;
+  padding: 0 48px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.tool-intro a { color: var(--accent); }
+
 @media (max-width: 700px) {
   .parties { grid-template-columns: 1fr; }
   .sheet { padding: 24px; }
   .summary { width: 100%; }
   .site-footer { padding: 0 24px; }
+  .tool-intro { padding: 0 24px; }
 }
 
 @page {
