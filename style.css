@@ -247,6 +247,26 @@ input:focus, textarea:focus {
 .items-table--estimate .col-price { width: 156px; }
 .items-table--estimate .col-amount { width: 170px; }
 
+.items-table .item-note { text-align: left; }
+
+.request-conditions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 24px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.request-conditions label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
 .item-amount { font-variant-numeric: tabular-nums; }
 
 .removeRowBtn {
@@ -392,6 +412,7 @@ input:focus, textarea:focus {
   .summary { width: 100%; }
   .site-footer { padding: 0 24px; }
   .tool-intro { padding: 0 24px; }
+  .request-conditions { grid-template-columns: 1fr; }
 }
 
 @page {
