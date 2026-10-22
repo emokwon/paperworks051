@@ -51,14 +51,20 @@ function recalcTotals() {
     const qty = parseFloat(qtyRaw) || 0;
     const isEmptyQty = qtyRaw === '' || qty === 0;
 
-    if (isEmptyQty && document.activeElement !== priceInput) {
+    const isEditingRow = document.activeElement === qtyInput || document.activeElement === priceInput;
+
+    if (isEmptyQty && !isEditingRow) {
+      if (priceInput.value !== '') priceInput.dataset.stash = priceInput.value;
       priceInput.value = '';
+    } else if (!isEmptyQty && priceInput.value === '' && priceInput.dataset.stash) {
+      priceInput.value = priceInput.dataset.stash;
+      delete priceInput.dataset.stash;
     }
     if (qty === 0 && document.activeElement !== qtyInput) {
       qtyInput.value = '';
     }
 
-    const price = parseNumber(priceInput.value);
+    const price = parseNumber(priceInput.value || priceInput.dataset.stash || '');
     const amount = qty * price;
     row.querySelector('.item-amount').textContent = isEmptyQty ? '' : won(amount);
     subtotal += amount;
@@ -80,6 +86,7 @@ function recalcTotals() {
 
 itemsBody.addEventListener('input', (e) => {
   if (e.target.classList.contains('item-price')) {
+    delete e.target.dataset.stash;
     formatPriceInput(e.target);
     recalcTotals();
   } else if (e.target.classList.contains('item-qty')) {
@@ -132,7 +139,7 @@ function collectDraft() {
     name: row.querySelector('.item-name').value,
     desc: row.querySelector('.item-desc').value,
     qty: row.querySelector('.item-qty').value,
-    price: row.querySelector('.item-price').value,
+    price: row.querySelector('.item-price').value || row.querySelector('.item-price').dataset.stash || '',
   }));
 
   const stamp = stampPreview.hidden ? null : stampPreview.src;
@@ -179,8 +186,8 @@ function loadDraft() {
       const row = itemsBody.lastElementChild;
       row.querySelector('.item-name').value = item.name || '';
       row.querySelector('.item-desc').value = item.desc || '';
-      row.querySelector('.item-qty').value = item.qty || '1';
-      row.querySelector('.item-price').value = item.price || '0';
+      row.querySelector('.item-qty').value = item.qty ?? '1';
+      row.querySelector('.item-price').value = item.price ?? '0';
     });
   }
 
@@ -261,8 +268,21 @@ window.addEventListener('beforeprint', fitSheetToOnePage);
 window.addEventListener('afterprint', resetSheetScale);
 
 addRowBtn.addEventListener('click', addRow);
-depositRate.addEventListener('input', recalcTotals);
-balanceRate.addEventListener('input', recalcTotals);
+function syncRates(changed, other) {
+  const raw = changed.value.trim();
+  if (raw === '') {
+    other.value = '';
+  } else {
+    const typed = parseFloat(raw) || 0;
+    const value = Math.min(100, Math.max(0, typed));
+    if (typed !== value) changed.value = value;
+    other.value = Math.round((100 - value) * 100) / 100;
+  }
+  recalcTotals();
+}
+
+depositRate.addEventListener('input', () => syncRates(depositRate, balanceRate));
+balanceRate.addEventListener('input', () => syncRates(balanceRate, depositRate));
 printBtn.addEventListener('click', () => {
   fitSheetToOnePage();
   window.print();
