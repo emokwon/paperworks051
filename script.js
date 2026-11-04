@@ -42,31 +42,57 @@ function renumberRows() {
   });
 }
 
+// 값을 지우지 않고 잠시 보관해 두었다가, 조건이 맞으면 되돌린다 (수정 중 값이 사라지지 않도록)
+function stashValue(input) {
+  if (input.value !== '') input.dataset.stash = input.value;
+  input.value = '';
+}
+
+function unstashValue(input) {
+  if (input.value === '' && input.dataset.stash) input.value = input.dataset.stash;
+  delete input.dataset.stash;
+}
+
+const storedValue = (input) => input.value || input.dataset.stash || '';
+
 function recalcTotals() {
   let subtotal = 0;
-  itemsBody.querySelectorAll('.item-row').forEach((row) => {
+  itemsBody.querySelectorAll('.item-row').forEach((row, rowIndex) => {
+    const nameInput = row.querySelector('.item-name');
+    const descInput = row.querySelector('.item-desc');
     const qtyInput = row.querySelector('.item-qty');
     const priceInput = row.querySelector('.item-price');
+    const amountEl = row.querySelector('.item-amount');
+    const isEditingRow = row.contains(document.activeElement);
+
+    // 품목이 비어 있으면 번호도 공란
+    row.querySelector('.row-index').textContent = nameInput.value.trim() === '' ? '' : rowIndex + 1;
+
+    // 품목이 비어 있으면 나머지 칸도 모두 공란 (합계에도 포함하지 않음)
+    if (nameInput.value.trim() === '') {
+      if (!isEditingRow) [descInput, qtyInput, priceInput].forEach(stashValue);
+      amountEl.textContent = '';
+      return;
+    }
+
+    unstashValue(descInput);
+    unstashValue(qtyInput);
+
     const qtyRaw = qtyInput.value.trim();
     const qty = parseFloat(qtyRaw) || 0;
     const isEmptyQty = qtyRaw === '' || qty === 0;
 
-    const isEditingRow = document.activeElement === qtyInput || document.activeElement === priceInput;
-
     if (isEmptyQty && !isEditingRow) {
-      if (priceInput.value !== '') priceInput.dataset.stash = priceInput.value;
-      priceInput.value = '';
-    } else if (!isEmptyQty && priceInput.value === '' && priceInput.dataset.stash) {
-      priceInput.value = priceInput.dataset.stash;
-      delete priceInput.dataset.stash;
+      stashValue(priceInput);
+    } else if (!isEmptyQty) {
+      unstashValue(priceInput);
     }
     if (qty === 0 && document.activeElement !== qtyInput) {
       qtyInput.value = '';
     }
 
-    const price = parseNumber(priceInput.value || priceInput.dataset.stash || '');
-    const amount = qty * price;
-    row.querySelector('.item-amount').textContent = isEmptyQty ? '' : won(amount);
+    const amount = qty * parseNumber(storedValue(priceInput));
+    amountEl.textContent = isEmptyQty ? '' : won(amount);
     subtotal += amount;
   });
   const vat = subtotal * 0.1;
@@ -89,15 +115,16 @@ itemsBody.addEventListener('input', (e) => {
     delete e.target.dataset.stash;
     formatPriceInput(e.target);
     recalcTotals();
-  } else if (e.target.classList.contains('item-qty')) {
+  } else if (e.target.classList.contains('item-qty') || e.target.classList.contains('item-name')) {
     recalcTotals();
   }
 });
 
 itemsBody.addEventListener('focusout', (e) => {
-  if (e.target.classList.contains('item-price') || e.target.classList.contains('item-qty')) {
-    recalcTotals();
-  }
+  const row = e.target.closest('.item-row');
+  if (!row) return;
+  if (e.relatedTarget && row.contains(e.relatedTarget)) return;
+  recalcTotals();
 });
 
 itemsBody.addEventListener('click', (e) => {
@@ -137,9 +164,9 @@ function collectDraft() {
 
   const items = [...itemsBody.querySelectorAll('.item-row')].map((row) => ({
     name: row.querySelector('.item-name').value,
-    desc: row.querySelector('.item-desc').value,
-    qty: row.querySelector('.item-qty').value,
-    price: row.querySelector('.item-price').value || row.querySelector('.item-price').dataset.stash || '',
+    desc: storedValue(row.querySelector('.item-desc')),
+    qty: storedValue(row.querySelector('.item-qty')),
+    price: storedValue(row.querySelector('.item-price')),
   }));
 
   const stamp = stampPreview.hidden ? null : stampPreview.src;
@@ -188,6 +215,7 @@ function loadDraft() {
       row.querySelector('.item-desc').value = item.desc || '';
       row.querySelector('.item-qty').value = item.qty ?? '1';
       row.querySelector('.item-price').value = item.price ?? '0';
+      row.querySelectorAll('.item-desc, .item-qty, .item-price').forEach((input) => delete input.dataset.stash);
     });
   }
 
@@ -229,6 +257,7 @@ function fitSheetToOnePage() {
   // so a transform-scaled box still overflows onto a second page even
   // though it renders smaller. `zoom` actually resizes the layout box,
   // so pagination sees the shrunk size too.
+  if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
   sheet.style.zoom = '';
   removeAutoFilledRows();
 
