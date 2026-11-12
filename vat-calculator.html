@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-HQBQNZYNZG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-HQBQNZYNZG');
+</script>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1932823509799881"
+     crossorigin="anonymous"></script>
+<title>부가세 계산기 - 공급가액·부가세·합계 계산 | 무료 문서 양식</title>
+<meta name="description" content="부가세(VAT 10%) 계산기. 공급가액으로 부가세와 합계를, 부가세 포함 합계로 공급가액과 부가세를 바로 계산하세요. 부가세 별도·포함 차이와 견적서 작성 팁도 함께 안내합니다.">
+<link rel="canonical" href="https://www.paperworks051.kr/vat-calculator.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content="무료 문서 양식">
+<meta property="og:title" content="부가세 계산기 - 공급가액·부가세·합계 계산">
+<meta property="og:description" content="공급가액으로 부가세와 합계를, 부가세 포함 합계로 공급가액을 계산하는 부가세(10%) 계산기.">
+<meta property="og:url" content="https://www.paperworks051.kr/vat-calculator.html">
+<meta property="og:image" content="https://www.paperworks051.kr/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "부가세 계산기",
+  "url": "https://www.paperworks051.kr/vat-calculator.html",
+  "description": "공급가액으로 부가세와 합계를, 부가세 포함 합계로 공급가액과 부가세를 계산하는 부가세(10%) 계산기.",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Any",
+  "inLanguage": "ko",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "KRW"
+  }
+}
+</script>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="info.css">
+</head>
+<body>
+  <div class="toolbar no-print">
+    <div class="toolbar-title">
+      <a class="back-link" href="index.html">← 처음으로</a>
+      <h1>부가세 계산기</h1>
+    </div>
+  </div>
+
+  <main class="sheet info-sheet">
+    <h2>부가세 계산기</h2>
+    <p>
+      부가가치세(부가세, VAT)는 일반적으로 공급가액의 10%입니다. 부가세가 붙지 않은 금액(공급가액)으로 부가세와 합계를 구하거나,
+      이미 부가세가 포함된 합계 금액에서 공급가액과 부가세를 거꾸로 나눠 볼 수 있습니다.
+    </p>
+
+    <div class="calc-box">
+      <div class="calc-modes">
+        <label><input type="radio" name="mode" value="forward" checked> 공급가액 → 부가세·합계</label>
+        <label><input type="radio" name="mode" value="reverse"> 합계(부가세 포함) → 공급가액</label>
+      </div>
+
+      <label class="calc-input-label">
+        <span id="inputLabel">공급가액 (부가세 별도 금액, 원)</span>
+        <input type="text" id="amountInput" inputmode="numeric" placeholder="예: 1,000,000" autocomplete="off">
+      </label>
+
+      <table class="calc-result">
+        <tbody>
+          <tr><td>공급가액 (부가세 별도 금액)</td><td id="outSupply">-</td></tr>
+          <tr><td>부가세 (10%)</td><td id="outVat">-</td></tr>
+          <tr class="net-row"><td>합계 (부가세 포함)</td><td id="outTotal">-</td></tr>
+        </tbody>
+      </table>
+      <p class="calc-note" id="calcNote"></p>
+    </div>
+
+    <h3>부가세란 무엇인가요?</h3>
+    <p>
+      부가세는 물건이나 서비스를 사고팔 때 거래 금액에 붙는 세금으로, 최종 소비자가 부담하고 사업자가 대신 받아 나라에 납부합니다.
+      일반과세 사업자의 세율은 <strong>10%</strong>입니다. 거래 금액에서 부가세를 뺀 값을 <strong>공급가액</strong>,
+      부가세를 더한 값을 <strong>합계(공급대가)</strong>라고 부릅니다.
+    </p>
+
+    <h3>계산 방식</h3>
+    <ul>
+      <li>부가세 = 공급가액 × 10% (원 단위 미만 절사)</li>
+      <li>합계 = 공급가액 + 부가세 (공급가액 × 1.1)</li>
+      <li>합계에서 거꾸로 계산할 때는 공급가액 ≒ 합계 ÷ 1.1, 부가세 = 합계 − 공급가액</li>
+      <li>예) 공급가액 1,000,000원 → 부가세 100,000원, 합계 1,100,000원</li>
+      <li>예) 합계 550,000원 → 공급가액 500,000원, 부가세 50,000원</li>
+    </ul>
+    <p>
+      실제 세금계산서에서는 거래마다 원 단위 처리 방식이 다를 수 있어 몇 원 차이가 날 수 있습니다.
+    </p>
+
+    <h3>"부가세 별도"와 "부가세 포함"의 차이</h3>
+    <p>
+      견적서나 계약서에 금액이 <strong>"부가세 별도"</strong>로 적혀 있으면 그 금액이 공급가액이고, 실제로 지불하는 금액은 여기에
+      10%를 더한 합계입니다. 반대로 <strong>"부가세 포함"</strong>이라고 적혀 있으면 그 금액이 이미 합계이므로 추가로 더 내지 않습니다.
+      같은 100만 원이라도 두 경우의 실제 부담은 약 10만 원 차이가 나므로, 견적서에는 어느 쪽인지 반드시 적어 두는 것이 좋습니다.
+    </p>
+
+    <h3>자주 묻는 질문</h3>
+    <h3 style="margin-top:16px;">Q. 모든 거래에 부가세가 붙나요?</h3>
+    <p>
+      아닙니다. 면세 상품·서비스(일부 농수산물, 의료·교육 서비스 등)와 간이과세자·면세사업자의 거래는 부가세가 없거나 다르게 계산될 수 있습니다.
+      이 계산기는 일반적인 10% 기준의 참고용이며, 정확한 판단은 세무사 또는 국세청 홈택스를 통해 확인하세요.
+    </p>
+    <h3 style="margin-top:16px;">Q. 견적서에는 부가세를 어떻게 표시하나요?</h3>
+    <p>
+      품목별 금액을 합한 <strong>공급가액</strong>, 그 10%인 <strong>부가세</strong>, 둘을 더한 <strong>합계</strong>를 나누어 적는 것이 일반적입니다.
+      <a href="estimate.html">무료 견적서 양식</a>은 품목을 입력하면 공급가액·부가세·합계가 자동으로 계산됩니다.
+    </p>
+    <h3 style="margin-top:16px;">Q. 프리랜서 3.3%와 부가세는 같이 내나요?</h3>
+    <p>
+      사업자등록 없이 일하는 프리랜서는 부가세 없이 3.3% 원천징수를 하는 경우가 많고, 사업자등록을 하고 세금계산서를 발행하는 사업자는
+      부가세 10%를 받는 방식이 일반적입니다. 자세한 내용은 <a href="freelancer-tax.html">프리랜서 3.3% 계산기</a>와
+      <a href="guide-freelancer.html">프리랜서 서류 작성 가이드</a>를 참고하세요.
+    </p>
+
+    <p class="calc-disclaimer">본 계산기는 참고용이며 법적·세무적 효력이 없습니다.</p>
+  </main>
+
+  <footer class="site-footer no-print">
+    <a href="guide-compare.html">문서 종류 비교</a>
+    <a href="feedback.html">건의하기</a>
+    <a href="about.html">소개</a>
+    <a href="privacy.html">개인정보처리방침</a>
+    <a href="terms.html">이용약관</a>
+  </footer>
+
+  <script src="vat-calculator.js"></script>
+</body>
+</html>
