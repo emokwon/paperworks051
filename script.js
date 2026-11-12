@@ -96,7 +96,8 @@ function recalcTotals() {
     amountEl.textContent = isEmptyQty ? '' : won(amount);
     subtotal += amount;
   });
-  const vat = subtotal * 0.1;
+  // 부가세도 일의 자리(1원 단위)를 버림 → 품목 금액과 부가세가 모두 10원 단위라 합계의 1원 단위가 항상 0
+  const vat = Math.trunc(subtotal / 100) * 10;
   const total = subtotal + vat;
 
   subtotalDisplay.textContent = won(subtotal);
@@ -104,11 +105,16 @@ function recalcTotals() {
   totalDisplay.textContent = won(total);
   grandTotalDisplay.textContent = won(total);
 
+  // 선금·잔금도 일의 자리(1원 단위)를 버려 10원 단위로 맞춘다.
+  // 선금+잔금 비율이 100%면 잔금 = 합계 − 선금 이라서 두 금액의 합이 항상 합계와 같다.
+  const trunc10 = (n) => Math.trunc(n / 10) * 10;
   const rate = Math.min(100, Math.max(0, parseFloat(depositRate.value) || 0));
-  depositAmountDisplay.textContent = won(total * (rate / 100));
+  const deposit = trunc10(total * (rate / 100));
+  depositAmountDisplay.textContent = won(deposit);
 
   const bRate = Math.min(100, Math.max(0, parseFloat(balanceRate.value) || 0));
-  balanceAmountDisplay.textContent = won(total * (bRate / 100));
+  const balance = Math.abs(rate + bRate - 100) < 1e-9 ? total - deposit : trunc10(total * (bRate / 100));
+  balanceAmountDisplay.textContent = won(balance);
 }
 
 itemsBody.addEventListener('input', (e) => {
