@@ -91,7 +91,8 @@ function recalcTotals() {
       qtyInput.value = '';
     }
 
-    const amount = qty * parseNumber(storedValue(priceInput));
+    // 품목 금액은 일의 자리(1원 단위)를 버림
+    const amount = Math.trunc((qty * parseNumber(storedValue(priceInput))) / 10) * 10;
     amountEl.textContent = isEmptyQty ? '' : won(amount);
     subtotal += amount;
   });
